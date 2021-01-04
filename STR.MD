@@ -23,7 +23,13 @@ In order to understand the STR file format, some familiarity with the following 
 
 While storing effects in a separate file format seems handy, they differ from SPR and ACT files (that can also be abused to create effects) in that they don't contain the actual image data. Instead, they reference files locally, i.e. inside the ``data/texture/effect`` folder. This is where both the STR files and the bitmaps they use are stored.
 
-From a technical POV, it appears that sprites are simply meshes rendered in billboard mode (always facing the camera) and then are modified to account for camera perspective, while STR effects are rendered either as projected textures (for AOE/ground effects) or similarly as "actors" in the game world but without the complex logic required to handle look/face directions. More research is needed to confirm this, however.
+From a technical POV, it appears that sprites are simply meshes rendered in billboard mode (always facing the camera) and then are modified to account for camera perspective, while STR effects are rendered either as projected textures (for AOE/ground effects) or similarly as "actors" in the game world but without the complex logic required to handle look/face directions (**TODO: Is this actually true?**). More research is needed to confirm this, however.
+
+I assume these effects are unable to play sounds, as the ACT data contains event emitters that are forwarded to the engine (example: mvp.act)? 2d/3d primitive RagEffects CAN play sounds, but these are hardcoded? STR effects may also work like this, but use the STR instead of SPR/ACT for billboard effects/no sound/no layering,anchor points?
+
+
+
+**TODO: Confirm by checking mvp.act  and RagEffect**
 
 ## Layout
 
@@ -40,3 +46,25 @@ There are only a few tools available to parse STR files, as far as I know:
 * [RO STR Viewer](https://herc.ws/board/topic/17268-rostrviewer-reupload): Looks a bit dated, but contains all the information as far as I can tell
 * https://github.com/skardach/ro-str-viewer: I actually didn't care enough to make it run, but an open-source reference implementation is always nice to have
 * RoBrowser (see [Tools.md](Tools.md)) has an Effect viewer that appears to be fully functional
+
+## WIP (Delete later)
+
+* cLayer can be 128 at most, but devil.str has cLayer = 145??
+* cEndLayer in KANICLIP is unused? (overwritten in ``CRagEffect::LoadEzEffect` and ``CRagEffect::InitEZ2STRFrame```)
+* KSTR version is fixed to 148? (0x0094)
+* What about the KAC_XFORMDATA (Keyframe Animation Clip?)
+* nFPS is zero and unused?
+* cFrame is 60 and unused?
+* Review RenderAniClip
+* Review m_isLayerDrawn
+* Research EZV format and see if it matches what we expect (compiled/binary EZV = STR)
+* Review and explain concepts: Keyframe/Animation Clip, Layer, frame, transform?
+* Research exact differences between ACT/SPR Sprites and STR EzEffects
+* Can they play sound effects? MVP effect uses SPR, so probably no (event emitter of the ACT data is used for this, I think)
+
+In ``CEZeffect :: OnInit()`` we find this code:
+
+````
+m_cEndLayer = m_aniClips->cLayer;
+if (m_aniClips->aLayer[0].cAniKey == 0) m_cEndLayer--;
+````

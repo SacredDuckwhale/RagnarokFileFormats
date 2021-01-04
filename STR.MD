@@ -68,3 +68,291 @@ In ``CEZeffect :: OnInit()`` we find this code:
 m_cEndLayer = m_aniClips->cLayer;
 if (m_aniClips->aLayer[0].cAniKey == 0) m_cEndLayer--;
 ````
+mtpreset property refers to alpha blend mode? (seems to be ignored in RoBrowser)
+
+	SetMultiTextureMode:
+		switch (nMode) {
+			// Modulate Alpha
+			case 0:
+				m_device->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 0 );
+
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLOROP,   D3DTOP_MODULATE);
+
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_MODULATE );
+
+				m_device->SetTextureStageState(1, D3DTSS_COLOROP, D3DTOP_DISABLE);
+				m_device->SetTextureStageState(1, D3DTSS_ALPHAOP, D3DTOP_DISABLE);
+				break;
+
+		case 1:
+			// Modulate
+			{
+				m_device->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 0 );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLOROP,   D3DTOP_MODULATE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG1 );
+
+				m_device->SetTextureStageState( 1, D3DTSS_COLOROP,   D3DTOP_DISABLE );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAOP,   D3DTOP_DISABLE );
+			}
+			break;
+
+			// Modulate Alpha
+		case 2:
+			{
+				m_device->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 0 );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLOROP,   D3DTOP_MODULATE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG1 );
+
+				m_device->SetTextureStageState( 1, D3DTSS_COLOROP,   D3DTOP_DISABLE );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAOP,   D3DTOP_DISABLE );
+			}
+			break;
+
+		case 3:
+			// Add
+			{
+				m_device->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 0 );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLOROP,   D3DTOP_ADD );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG2 );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE );
+
+				m_device->SetTextureStageState( 1, D3DTSS_COLOROP,   D3DTOP_DISABLE );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAOP,   D3DTOP_DISABLE );
+			}
+			break;
+
+		case 4:
+			// Decal Alpha
+			{
+				m_device->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 0 );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLOROP,   D3DTOP_BLENDTEXTUREALPHA );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG2 );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE );
+
+				m_device->SetTextureStageState( 1, D3DTSS_COLOROP,   D3DTOP_DISABLE );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAOP,   D3DTOP_DISABLE );
+			}
+			break;
+
+		case 5:
+			// Colored light map
+			{
+				m_device->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 0 );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLOROP,   D3DTOP_MODULATE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG2 );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE );
+
+				m_device->SetTextureStageState( 1, D3DTSS_TEXCOORDINDEX, 1 );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 1, D3DTSS_COLOROP,   D3DTOP_MODULATE );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG2, D3DTA_CURRENT );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG1 );
+			}
+			break;
+
+		case 6:
+			// Inverse colored light map
+			{
+				m_device->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 0 );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE | D3DTA_COMPLEMENT );
+				m_device->SetTextureStageState( 0, D3DTSS_COLOROP,   D3DTOP_MODULATE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG2 );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE );
+
+				m_device->SetTextureStageState( 1, D3DTSS_TEXCOORDINDEX, 1 );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG1, D3DTA_TEXTURE | D3DTA_COMPLEMENT );
+				m_device->SetTextureStageState( 1, D3DTSS_COLOROP,   D3DTOP_MODULATE );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG2, D3DTA_CURRENT );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG1 );
+			}
+			break;
+
+		case 7:
+			// Single channel light map
+			{
+				m_device->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 0 );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLOROP,   D3DTOP_SELECTARG1 );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG1 );
+
+				m_device->SetTextureStageState( 1, D3DTSS_TEXCOORDINDEX, 1 );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG1, D3DTA_TEXTURE | D3DTA_ALPHAREPLICATE );
+				m_device->SetTextureStageState( 1, D3DTSS_COLOROP,   D3DTOP_MODULATE );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG2, D3DTA_CURRENT );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG1 );
+			}
+			break;
+
+		case 8:
+			// Modulate and late add
+			{
+				m_device->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 0 );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLOROP,   D3DTOP_MODULATE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG1 );
+
+				m_device->SetTextureStageState( 1, D3DTSS_TEXCOORDINDEX, 1 );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 1, D3DTSS_COLOROP,   D3DTOP_ADD );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG2, D3DTA_CURRENT );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG1 );
+			}
+			break;
+
+		case 9:
+			// Linear blend using texture alpha
+			{
+				m_device->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 0 );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLOROP,   D3DTOP_MODULATE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG2 );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE );
+
+				m_device->SetTextureStageState( 1, D3DTSS_TEXCOORDINDEX, 1 );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 1, D3DTSS_COLOROP,   D3DTOP_BLENDTEXTUREALPHA );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG2, D3DTA_CURRENT );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG1 );
+			}
+			break;
+
+		case 10:
+			// Linear blend using diffuse alpha
+			{
+				m_device->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 0 );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLOROP,   D3DTOP_MODULATE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG2 );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE );
+
+				m_device->SetTextureStageState( 1, D3DTSS_TEXCOORDINDEX, 1 );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 1, D3DTSS_COLOROP,   D3DTOP_BLENDDIFFUSEALPHA );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG2, D3DTA_CURRENT );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG1 );
+			}
+			break;
+
+		case 11:
+			// Multitexture add w/smooth saturation
+			{
+				m_device->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 0 );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLOROP,   D3DTOP_MODULATE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG2 );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE );
+
+				m_device->SetTextureStageState( 1, D3DTSS_TEXCOORDINDEX, 1 );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 1, D3DTSS_COLOROP,   D3DTOP_ADD );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG2, D3DTA_CURRENT );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG1 );
+			}
+			break;
+
+		case 12:
+			// Multitexture subtract
+			{
+				m_device->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 0 );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLOROP,   D3DTOP_MODULATE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG2 );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE );
+
+				m_device->SetTextureStageState( 1, D3DTSS_TEXCOORDINDEX, 1 );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG1, D3DTA_TEXTURE | D3DTA_COMPLEMENT );
+				m_device->SetTextureStageState( 1, D3DTSS_COLOROP,   D3DTOP_ADD );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG2, D3DTA_CURRENT );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG1 );
+			}
+			break;
+
+		case 13:
+			// Add Diffuse to light map then modulate
+			{
+				m_device->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 0 );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLOROP,   D3DTOP_ADD );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG1 );
+
+				m_device->SetTextureStageState( 1, D3DTSS_TEXCOORDINDEX, 1 );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 1, D3DTSS_COLOROP,   D3DTOP_MODULATE );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG2, D3DTA_CURRENT );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG1 );
+			}
+			break;
+
+		case 14:
+			// Detail modulate
+			{
+				m_device->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 0 );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLOROP,   D3DTOP_MODULATE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG2 );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE );
+
+				m_device->SetTextureStageState( 1, D3DTSS_TEXCOORDINDEX, 1 );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 1, D3DTSS_COLOROP,   D3DTOP_MODULATE2X );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG2, D3DTA_CURRENT );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG1 );
+			}
+			break;
+
+		case 15:
+			// Detail add
+			{
+				m_device->SetTextureStageState( 0, D3DTSS_TEXCOORDINDEX, 0 );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLOROP,   D3DTOP_MODULATE );
+				m_device->SetTextureStageState( 0, D3DTSS_COLORARG2, D3DTA_DIFFUSE );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG2 );
+				m_device->SetTextureStageState( 0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE );
+
+				m_device->SetTextureStageState( 1, D3DTSS_TEXCOORDINDEX, 1 );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 1, D3DTSS_COLOROP,   D3DTOP_ADDSIGNED );
+				m_device->SetTextureStageState( 1, D3DTSS_COLORARG2, D3DTA_CURRENT );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAARG1, D3DTA_TEXTURE );
+				m_device->SetTextureStageState( 1, D3DTSS_ALPHAOP,   D3DTOP_SELECTARG1 );
+			}
+			break;
+		}
